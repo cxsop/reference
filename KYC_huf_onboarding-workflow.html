@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HUF Demat — Full Workflow</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5fbf7;min-height:100vh;padding:2rem 1rem;display:flex;justify-content:center}
+  .container{width:100%;max-width:620px}
+  .fw{padding:1.25rem 1rem 1.5rem;background:#fff;border-radius:14px;border:1px solid #dff0e8}
+  .hdr{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding:12px 16px;border-radius:10px;background:#05a54b}
+  .hdr .ht{font-size:14px;font-weight:500;color:#fff}
+  .hdr .hs{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px}
+  .tabs{display:flex;gap:6px;margin-bottom:1.25rem}
+  .tb{flex:1;padding:7px 8px;font-size:11px;font-weight:500;border:1.5px solid #d4ede0;border-radius:8px;background:#f5fbf7;color:#4a9c6d;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .18s;line-height:1.3}
+  .tb.on{background:#05a54b;color:#fff;border-color:#05a54b}
+  .phase-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;margin-bottom:1rem}
+  .pb-open{background:#fff8eb;color:#92620a;border:1px solid #f5d68a}
+  .pb-active{background:#e8f5ee;color:#05a54b;border:1px solid #b8e2c8}
+  .leg{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:1.25rem;padding:9px 12px;border-radius:8px;border:1px solid #e0f0e8;background:#f5fbf7}
+  .li{display:flex;align-items:center;gap:6px;font-size:11px;color:#7C7C7C}
+  .ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .sc{display:flex;flex-direction:column}
+  .sr{display:flex;align-items:stretch}
+  .slc{display:flex;flex-direction:column;align-items:center;width:40px;flex-shrink:0}
+  .sn{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0;margin-top:3px}
+  .sv{width:2px;flex:1;min-height:14px}
+  .card{flex:1;margin:0 0 12px 10px;padding:12px 14px;border-radius:8px;border:1px solid #dff0e8;background:#fff;transition:border-color .15s}
+  .card:hover{border-color:#a8d9bc}
+  .ct{display:flex;align-items:flex-start;gap:10px}
+  .ci{width:30px;height:30px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .cb{flex:1}
+  .who{font-size:10px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+  .ttl{font-size:13px;font-weight:500;color:#1a4d31;margin-bottom:3px}
+  .dsc{font-size:12px;color:#7C7C7C;line-height:1.55}
+  .tip{font-size:11px;margin-top:8px;padding:6px 9px;border-radius:6px;line-height:1.5;display:flex;gap:6px;align-items:flex-start;border-left:2px solid #a8d9bc;background:#f0faf4;color:#3d7a57}
+  .warn{font-size:11px;margin-top:8px;padding:6px 9px;border-radius:6px;line-height:1.5;display:flex;gap:6px;align-items:flex-start;border-left:2px solid #f5d68a;background:#fffdf0;color:#92620a}
+  .addr{margin-top:8px;padding:8px 10px;border-radius:6px;background:#f5fbf7;border:1px solid #d4ede0;font-size:11px;color:#3d7a57;line-height:1.8}
+  .addr strong{color:#1a4d31;display:block;margin-bottom:3px;font-size:11px}
+  .bl{list-style:none;padding:0;margin:6px 0 0}
+  .bl li{font-size:12px;color:#7C7C7C;line-height:1.55;padding-left:14px;position:relative;margin-bottom:3px}
+  .bl li::before{content:'·';position:absolute;left:3px;color:#05a54b;font-weight:700}
+  /* step themes */
+  .sw .sn{background:#05a54b;color:#fff}.sw .sv{background:#c0e8d2}.sw .ci{background:#05a54b}.sw .who{color:#05a54b}
+  .su .sn{background:#d6f0e3;color:#05a54b}.su .sv{background:#c0e8d2}.su .ci{background:#ebf8f2}.su .who{color:#05a54b}
+  .sb .sn{background:#b8e2c8;color:#1a4d31}.sb .sv{background:#c0e8d2}.sb .ci{background:#e8f7ef}.sb .who{color:#2d7a4f}
+  .sk .sn{background:#fff8eb;color:#92620a}.sk .sv{background:#c0e8d2}.sk .ci{background:#fffdf0}.sk .who{color:#92620a}
+  .sd .sn{background:#05a54b;color:#fff}.sd .sv{background:transparent}.sd .ci{background:#ebf8f2}.sd .who{color:#05a54b}
+  .sd .card{background:#f0faf4;border-color:#b8e2c8}.sd .ttl{color:#05a54b}
+  /* features */
+  .fg{display:flex;flex-direction:column;gap:10px}
+  .fc{padding:12px 14px;border-radius:8px;border:1px solid #dff0e8;background:#fff}
+  .fh{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+  .fic{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  .ftt{font-size:13px;font-weight:500;color:#1a4d31}
+  .fd{font-size:12px;color:#7C7C7C;line-height:1.55}
+  .lc{padding:11px 14px;border-radius:8px;border:1px solid #f5d68a;background:#fffdf0;margin-top:4px}
+  .lh{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .lt{font-size:12px;font-weight:500;color:#92620a}
+  .tbar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;border:1px solid #dff0e8;background:#f5fbf7;font-size:12px;color:#7C7C7C;margin-top:14px}
+  .tbar strong{color:#1a4d31;font-weight:500}
+  .hide{display:none}
+</style>
+</head>
+<body>
+<div class="container"><div class="fw">
+
+<div class="hdr">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"/><path d="M5 20c0-3.866 3.134-7 7-7s7 3.134 7 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><path d="M17 6l2 2 4-4" stroke="rgba(255,255,255,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div><div class="ht">HUF Demat — Full Account Workflow</div><div class="hs">Hindu Undivided Family Account · Wint Wealth Operations</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tb on" onclick="showT('opening')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Account opening
+  </button>
+  <button class="tb" onclick="showT('onboard')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    Activation &amp; onboarding
+  </button>
+  <button class="tb" onclick="showT('features')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Features &amp; limits
+  </button>
+</div>
+
+<!-- TAB 1 — ACCOUNT OPENING -->
+<div id="p-opening">
+  <div class="phase-badge pb-open">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#92620a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    Phase 1 — Account opening (fully offline) · ~15–20 working days
+  </div>
+  <div class="leg">
+    <div class="li"><span class="ld" style="background:#05a54b"></span>Associate action</div>
+    <div class="li"><span class="ld" style="background:#d6f0e3;border:1.5px solid #05a54b"></span>User action</div>
+    <div class="li"><span class="ld" style="background:#fff8eb;border:1.5px solid #f5d68a"></span>Physical / courier</div>
+    <div class="li"><span class="ld" style="background:#b8e2c8"></span>System triggered</div>
+  </div>
+  <div class="sc">
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">1</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="cb">
+          <div class="who">Associate</div>
+          <div class="ttl">Inform user about the process</div>
+          <div class="dsc">Let the user know that HUF account opening is a <strong style="color:#1a4d31">fully offline process</strong> taking approximately <strong style="color:#1a4d31">15–20 working days</strong>.</div>
+          <div class="tip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Explain that they must provide a unique mobile number and email ID not linked to any existing individual account on Wint Wealth. Once shared, we will email them the next steps and required documents list.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">2</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+        <div class="cb">
+          <div class="who">Associate</div>
+          <div class="ttl">Verify mobile number &amp; email in Finder</div>
+          <div class="dsc">Search in <strong style="color:#1a4d31">Finder</strong> to confirm the mobile number and email ID are not linked to any existing individual account.</div>
+          <div class="warn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#92620a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Both must be unique. Do not proceed if either is already registered on the platform.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">3</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <div class="cb">
+          <div class="who">Associate</div>
+          <div class="ttl">Collect HUF details from user</div>
+          <div class="dsc">Collect the following:</div>
+          <ul class="bl">
+            <li>HUF name</li>
+            <li>Karta name</li>
+            <li>Unique mobile number</li>
+            <li>Unique email ID</li>
+          </ul>
+          <div class="tip" style="margin-top:8px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Also inform the user that they will later need to provide: PAN, bank statement, address proof, list of members, and a physical HUF stamp (stating Karta only).</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">4</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="cb">
+          <div class="who">Associate</div>
+          <div class="ttl">Raise request in #huf-kyc-coordination</div>
+          <div class="dsc">Submit the <strong style="color:#1a4d31">HUF client Slack workflow form</strong> in the <strong style="color:#1a4d31">#huf-kyc-coordination</strong> channel with HUF name, Karta name, mobile number, and email ID.</div>
+          <div class="tip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Once submitted, the user will automatically receive an email with a Google Form to submit their necessary details.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr su">
+      <div class="slc"><div class="sn">5</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="cb">
+          <div class="who">User</div>
+          <div class="ttl">Fill &amp; submit the Google Form</div>
+          <div class="dsc">User fills in the Google Form received via email with all required details and documents.</div>
+          <div class="tip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>After submission, user receives the AOF (Account Opening Form) via email along with a guide on how to sign it.</div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr sk">
+      <div class="slc"><div class="sn">6</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#92620a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 5v3h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+        <div class="cb">
+          <div class="who">User · Physical courier</div>
+          <div class="ttl">Print, sign AOF &amp; courier documents</div>
+          <div class="dsc">User takes a printout of the AOF, signs it, and couriers it to our office with the following self-attested documents:</div>
+          <ul class="bl" style="margin-top:6px;">
+            <li>Self-attested Karta address proof (Aadhaar, Voter ID, or Passport)</li>
+            <li>Self-attested PAN copies for Karta and all members</li>
+            <li>Signed Account Opening Form (AOF)</li>
+          </ul>
+          <div class="warn" style="margin-top:8px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#92620a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Physical documents must only be couriered after digital scans have been verified via email.</div>
+          <div class="addr">
+            <strong>📦 Courier address</strong>
+            3rd Floor, The Pavilion #175, Dollars Colony,<br>
+            Near Rainbow Hospital, Bannerghatta Main Road,<br>
+            Bangalore, Karnataka, India – 560076
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr sd">
+      <div class="slc"><div class="sn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="cb">
+          <div class="who">Wint Wealth</div>
+          <div class="ttl">Documents received → proceed to activation</div>
+          <div class="dsc">Once the courier is received and verified, account opening is complete. The <strong style="color:#05a54b">Activation &amp; Onboarding</strong> phase begins from here.</div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+  <div class="tbar">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    Entire account opening is <strong>fully offline</strong> and takes approximately <strong>15–20 working days</strong>.
+  </div>
+</div>
+
+<!-- TAB 2 — ACTIVATION & ONBOARDING -->
+<div id="p-onboard" class="hide">
+  <div class="phase-badge pb-active">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    Phase 2 — Post account opening · Activation &amp; onboarding
+  </div>
+  <div class="leg">
+    <div class="li"><span class="ld" style="background:#05a54b"></span>Wint Wealth</div>
+    <div class="li"><span class="ld" style="background:#d6f0e3;border:1.5px solid #05a54b"></span>User action</div>
+    <div class="li"><span class="ld" style="background:#b8e2c8"></span>Joint step</div>
+    <div class="li"><span class="ld" style="background:#05a54b;opacity:.6"></span>Done</div>
+  </div>
+  <div class="sc">
+
+    <div class="sr su">
+      <div class="slc"><div class="sn">1</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div class="cb"><div class="who">User</div><div class="ttl">Signed sign-off submitted</div><div class="dsc">User submits the signed sign-off document — this triggers the HUF demat account activation.</div></div>
+      </div></div>
+    </div>
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">2</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="cb"><div class="who">Wint Wealth</div><div class="ttl">HUF demat account activated</div><div class="dsc">Account is activated and a dedicated <strong style="color:#1a4d31">POC (Point of Contact)</strong> is assigned to the user.</div></div>
+      </div></div>
+    </div>
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">3</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div class="cb">
+          <div class="who">Wint Wealth</div><div class="ttl">Two welcome emails sent</div>
+          <div class="dsc">Two separate emails are sent to the user:</div>
+          <div class="tip" style="flex-direction:column;gap:5px;">
+            <div style="display:flex;gap:6px;align-items:flex-start"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span><strong>Email 1:</strong> Beneficiary details to add in net-banking app.</span></div>
+            <div style="display:flex;gap:6px;align-items:flex-start"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span><strong>Email 2:</strong> Overview of features currently available.</span></div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+
+    <div class="sr sw">
+      <div class="slc"><div class="sn">4</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div class="cb"><div class="who">Wint Wealth · POC</div><div class="ttl">POC personally reaches out</div><div class="dsc">The assigned POC connects with the user to assist with queries, investments, and to kick off a smooth onboarding journey.</div></div>
+      </div></div>
+    </div>
+
+    <div class="sr sb">
+      <div class="slc"><div class="sn">5</div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2d7a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="cb"><div class="who">POC + User</div><div class="ttl">Onboarding call conducted</div><div class="dsc">The POC conducts a dedicated call to walk the user through the complete HUF investment process end to end.</div></div>
+      </div></div>
+    </div>
+
+    <div class="sr sd">
+      <div class="slc"><div class="sn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="sv"></div></div>
+      <div class="card"><div class="ct">
+        <div class="ci"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <div class="cb">
+          <div class="who">Post Onboarding</div><div class="ttl">Dedicated WhatsApp group created</div>
+          <div class="dsc">A WhatsApp group is created — includes the user, POC, and senior team members — for ongoing communication and coordination.</div>
+          <div class="tip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Ensures clear communication, correct guidance, and smooth coordination throughout.</div>
+        </div>
+      </div></div>
+    </div>
+
+  </div>
+  <div class="tbar">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    All transactions are handled <strong>offline</strong> during this phase. The HUF product will go live on the platform soon.
+  </div>
+</div>
+
+<!-- TAB 3 — FEATURES & LIMITS -->
+<div id="p-features" class="hide">
+  <div class="fg">
+
+    <div class="fc" style="background:#f0faf4;border-color:#b8e2c8;">
+      <div class="fh">
+        <div class="fic" style="background:#05a54b;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div>
+          <div style="display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:500;background:#fff8eb;color:#92620a;border:1px solid #f5d68a;margin-bottom:4px">⚡ Limited time offer</div>
+          <div class="ftt">Exclusive 0.25% additional YTM</div>
+        </div>
+      </div>
+      <div class="fd">An extra <strong style="color:#05a54b">0.25% YTM</strong> applies on investments made within the <strong style="color:#1a4d31">first 10 days</strong> of receiving the welcome email.</div>
+    </div>
+
+    <div class="fc">
+      <div class="fh">
+        <div class="fic" style="background:#ebf8f2;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <div class="ftt">Buying bonds</div>
+      </div>
+      <div class="fd">Bonds viewable on the platform. User must share bond name &amp; units <strong style="color:#1a4d31">at least 1 day before the trade</strong>.</div>
+      <ul class="bl">
+        <li>Unit reservation subject to MIT (Minimum Investment Threshold) on platform.</li>
+        <li>Exact investment amount (including decimals) must be transferred to the beneficiary account.</li>
+        <li>UTR details must be shared with POC for trade mapping on NSE.</li>
+        <li>Trade settlement slips shared by EOD.</li>
+        <li>Trades placed <strong style="color:#1a4d31">Monday to Friday only</strong>.</li>
+      </ul>
+      <div class="tip" style="margin-top:8px;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Bonds more than 95% sold cannot be reserved at this stage.</div>
+    </div>
+
+    <div class="fc">
+      <div class="fh">
+        <div class="fic" style="background:#ebf8f2;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div class="ftt">Dashboard visibility</div>
+      </div>
+      <div class="fd">Investments visible on the platform after trade settlement and dashboard update.</div>
+      <ul class="bl">
+        <li>A <strong style="color:#1a4d31">separate mobile number is mandatory</strong> — must not be already registered or KYC-verified.</li>
+      </ul>
+    </div>
+
+    <div class="fc">
+      <div class="fh">
+        <div class="fic" style="background:#ebf8f2;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#05a54b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg></div>
+        <div class="ftt">Selling bonds (liquidity)</div>
+      </div>
+      <div class="fd">Liquidity transactions may take <strong style="color:#1a4d31">4–5 working days</strong> — offline process.</div>
+      <ul class="bl">
+        <li>All reports and documents shared by POC on request.</li>
+        <li>App-based downloads not supported at this stage.</li>
+      </ul>
+    </div>
+
+    <div class="lc">
+      <div class="lh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#92620a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div class="lt">Current limitations</div>
+      </div>
+      <ul class="bl">
+        <li style="color:#92620a;">Referral feature <strong>not available</strong> currently — will be enabled once HUF goes live.</li>
+        <li style="color:#92620a;">Bonds more than 95% sold cannot be reserved.</li>
+        <li style="color:#92620a;">Portfolio summaries available only through POC — app downloads not yet supported.</li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="tbar">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7C7C7C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+    HUF product is under active development. Full platform features coming soon.
+  </div>
+</div>
+
+</div></div>
+<script>
+function showT(t){
+  document.getElementById('p-opening').classList.toggle('hide',t!=='opening');
+  document.getElementById('p-onboard').classList.toggle('hide',t!=='onboard');
+  document.getElementById('p-features').classList.toggle('hide',t!=='features');
+  document.querySelectorAll('.tb').forEach((b,i)=>{
+    b.classList.toggle('on',(t==='opening'&&i===0)||(t==='onboard'&&i===1)||(t==='features'&&i===2));
+  });
+}
+</script>
+</body>
+</html>

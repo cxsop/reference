@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wint Wealth | Account Deletion Process</title>
+  <style>
+    :root {
+      --green: #05A54B;
+      --green-light: #E8F8EE;
+      --green-mid: #B3E8C9;
+      --amber: #F59E0B;
+      --amber-light: #FEF3C7;
+      --red: #EF4444;
+      --red-light: #FEE2E2;
+      --blue: #3B82F6;
+      --blue-light: #EFF6FF;
+      --text-primary: #111827;
+      --text-mid: #374151;
+      --text-soft: #6B7280;
+      --grey-light: #F9FAFB;
+      --border: #E5E7EB;
+      --white: #FFFFFF;
+      --green-badge-text: #065F2E;
+      --amber-badge-text: #92400E;
+      --red-badge-text: #991B1B;
+      --blue-badge-text: #1E40AF;
+      --grey-badge-text: #4B5563;
+      --warning-bg: #FFFBEB;
+      --warning-border: #FDE68A;
+      --warning-text: #92400E;
+      --dark-warning-text: #78350F;
+      --deep-green-hover: #048A3E;
+      --deep-green-active: #065F2E;
+      --dark-bg: #1a1a1a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--text-mid);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: inherit; }
+
+    .site-shell {
+      min-height: 100vh;
+      background: linear-gradient(180deg, var(--white) 0%, var(--grey-light) 100%);
+    }
+
+    .hero {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 42px 0 28px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero-main {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 34px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green-badge-text);
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--text-primary);
+      margin: 0;
+      line-height: 1.12;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 66px);
+      margin-top: 18px;
+      max-width: 870px;
+    }
+
+    .hero-subtitle {
+      margin: 20px 0 0;
+      color: var(--text-mid);
+      max-width: 760px;
+      font-size: 18px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text-primary);
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--deep-green-hover);
+      border-color: var(--deep-green-hover);
+      outline: none;
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:focus {
+      border-color: var(--green-mid);
+      background: var(--green-light);
+      color: var(--deep-green-active);
+      outline: none;
+    }
+
+    .hero-panel {
+      background: var(--dark-bg);
+      color: var(--white);
+      border-radius: 28px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+      border: 1px solid var(--dark-bg);
+    }
+
+    .panel-label {
+      color: var(--green-mid);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .panel-title {
+      color: var(--white);
+      font-size: 28px;
+      margin-top: 8px;
+    }
+
+    .panel-copy {
+      color: var(--border);
+      margin: 12px 0 0;
+      font-size: 14px;
+    }
+
+    .mini-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mini-metric {
+      border: 1px solid var(--text-soft);
+      background: var(--dark-bg);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .metric-number {
+      color: var(--white);
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .metric-label {
+      color: var(--border);
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .layout {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 12px 0 70px;
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .toc {
+      position: sticky;
+      top: 24px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+    }
+
+    .toc-title {
+      font-size: 13px;
+      color: var(--text-primary);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+
+    .toc a {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-decoration: none;
+      color: var(--text-soft);
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .toc a:hover,
+    .toc a:focus {
+      color: var(--deep-green-active);
+      background: var(--green-light);
+      outline: none;
+    }
+
+    .toc-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      flex: 0 0 auto;
+    }
+
+    .content {
+      display: grid;
+      gap: 22px;
+    }
+
+    .section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 26px;
+      scroll-margin-top: 28px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-start;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .section-kicker {
+      color: var(--green);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .section h2 {
+      font-size: clamp(24px, 3vw, 36px);
+    }
+
+    .section-desc {
+      color: var(--text-soft);
+      max-width: 720px;
+      margin: 8px 0 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+    }
+
+    .badge-green { background: var(--green-light); color: var(--green-badge-text); border-color: var(--green-mid); }
+    .badge-amber { background: var(--amber-light); color: var(--amber-badge-text); border-color: var(--warning-border); }
+    .badge-red { background: var(--red-light); color: var(--red-badge-text); border-color: var(--red-light); }
+    .badge-blue { background: var(--blue-light); color: var(--blue-badge-text); border-color: var(--blue-light); }
+    .badge-grey { background: var(--grey-light); color: var(--grey-badge-text); border-color: var(--border); }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .summary-card {
+      background: var(--grey-light);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .summary-card.success {
+      background: var(--green-light);
+      border-color: var(--green-mid);
+    }
+
+    .summary-card.info {
+      background: var(--blue-light);
+      border-color: var(--blue-light);
+    }
+
+    .summary-card.warning {
+      background: var(--warning-bg);
+      border-color: var(--warning-border);
+    }
+
+    .summary-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--green);
+    }
+
+    .summary-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+      letter-spacing: -0.03em;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: var(--text-mid);
+      font-size: 14px;
+    }
+
+    .process-rail {
+      display: grid;
+      gap: 18px;
+      position: relative;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 18px;
+      position: relative;
+    }
+
+    .step-marker-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-marker {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--green);
+      color: var(--white);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      border: 4px solid var(--green-light);
+    }
+
+    .step-line {
+      width: 3px;
+      min-height: 168px;
+      background: var(--green-mid);
+      border-radius: 999px;
+    }
+
+    .process-step:last-child .step-line { display: none; }
+
+    .step-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
+    .step-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--grey-light);
+    }
+
+    .step-top h3 {
+      font-size: 22px;
+      margin-bottom: 7px;
+    }
+
+    .step-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 9px;
+    }
+
+    .step-body {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .action-box {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      background: var(--white);
+    }
+
+    .action-label {
+      color: var(--text-soft);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+
+    .action-box p {
+      margin: 0;
+      color: var(--text-mid);
+    }
+
+    .slack-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .slack-card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--white);
+      overflow: hidden;
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slack-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      background: var(--grey-light);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 14px;
+      min-height: 68px;
+    }
+
+    .slack-bot {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 0;
+    }
+
+    .slack-bot > div:last-child {
+      min-width: 0;
+    }
+
+    .bot-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--green-light);
+      color: var(--green-badge-text);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      border: 1px solid var(--green-mid);
+      flex: 0 0 auto;
+    }
+
+    .bot-name {
+      color: var(--text-primary);
+      font-weight: 900;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bot-channel {
+      color: var(--text-soft);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slack-time {
+      color: var(--blue-badge-text);
+      background: var(--blue-light);
+      border: 1px solid var(--blue-light);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .slack-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .slack-title {
+      color: var(--text-primary);
+      font-weight: 900;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      min-height: 50px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .slack-fields {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr);
+      gap: 8px 10px;
+      font-size: 13px;
+      align-items: start;
+    }
+
+    .field-key {
+      color: var(--text-soft);
+      font-weight: 800;
+    }
+
+    .field-value {
+      color: var(--text-mid);
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .note {
+      border-radius: 18px;
+      border: 1px solid var(--blue-light);
+      background: var(--blue-light);
+      padding: 16px;
+      color: var(--blue-badge-text);
+    }
+
+    .warning-note {
+      border-radius: 18px;
+      border: 1px solid var(--warning-border);
+      background: var(--warning-bg);
+      padding: 16px;
+      color: var(--warning-text);
+    }
+
+    .note strong,
+    .warning-note strong {
+      color: var(--text-primary);
+    }
+
+    .matrix {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: var(--white);
+    }
+
+    .matrix th,
+    .matrix td {
+      text-align: left;
+      padding: 14px 14px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      color: var(--text-mid);
+      font-size: 14px;
+    }
+
+    .matrix th {
+      background: var(--green-light);
+      color: var(--green-badge-text);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 900;
+    }
+
+    .matrix tr:last-child td { border-bottom: none; }
+
+    .matrix td + td,
+    .matrix th + th { border-left: 1px solid var(--border); }
+
+    .tabbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text-soft);
+      padding: 10px 13px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 13px;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover,
+    .tab-btn:focus {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+      outline: none;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .script-card {
+      background: var(--grey-light);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .script-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .script-title {
+      color: var(--text-primary);
+      font-weight: 900;
+      font-size: 17px;
+    }
+
+    .script-text {
+      margin: 0;
+      color: var(--text-mid);
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 14px;
+    }
+
+    .copy-btn {
+      border: 1px solid var(--green-mid);
+      background: var(--green-light);
+      color: var(--green-badge-text);
+      border-radius: 999px;
+      padding: 8px 10px;
+      font-weight: 900;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .copy-btn:hover,
+    .copy-btn:focus {
+      background: var(--green);
+      color: var(--white);
+      border-color: var(--green);
+      outline: none;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 12px;
+    }
+
+    .check-item {
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .check-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green-light);
+      color: var(--green-badge-text);
+      border: 1px solid var(--green-mid);
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+
+    .check-title {
+      color: var(--text-primary);
+      font-weight: 900;
+      margin-bottom: 3px;
+    }
+
+    .check-copy {
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .do-dont {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .rule-card {
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      background: var(--white);
+    }
+
+    .rule-card.do { background: var(--green-light); border-color: var(--green-mid); }
+    .rule-card.dont { background: var(--red-light); border-color: var(--red-light); }
+
+    .rule-card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .rule-card ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .rule-card li {
+      margin: 8px 0;
+      color: var(--text-mid);
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      background: var(--white);
+      color: var(--text-soft);
+      padding: 22px 0;
+    }
+
+    .footer-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 13px;
+    }
+
+    @media (max-width: 980px) {
+      .hero,
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .toc { position: static; }
+
+      .summary-grid,
+      .two-col,
+      .slack-grid,
+      .do-dont {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .hero { padding-top: 28px; }
+
+      .hero-main,
+      .hero-panel,
+      .section {
+        border-radius: 20px;
+        padding: 20px;
+      }
+
+      .mini-metrics { grid-template-columns: 1fr; }
+
+      .process-step {
+        grid-template-columns: 44px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .step-marker {
+        width: 38px;
+        height: 38px;
+        border-width: 3px;
+      }
+
+      .step-line { min-height: 230px; }
+
+      .step-body { grid-template-columns: 1fr; }
+
+      .section-header { flex-direction: column; }
+
+      .matrix {
+        display: block;
+        overflow-x: auto;
+      }
+
+      .check-item { grid-template-columns: 34px minmax(0, 1fr); }
+      .check-item .badge { grid-column: 2; justify-self: start; }
+    }
+
+    @media print {
+      .toc,
+      .hero-actions,
+      .copy-btn,
+      .tabbar { display: none; }
+      .hero,
+      .layout { width: 100%; display: block; padding: 0; }
+      .section,
+      .hero-main,
+      .hero-panel { break-inside: avoid; margin-bottom: 16px; }
+      .tab-panel { display: block; }
+      body { background: var(--white); }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-main">
+        <div class="eyebrow"><span class="eyebrow-dot"></span>Internal training guide</div>
+        <h1 id="page-title">Account Deletion / Closure Process</h1>
+        <p class="hero-subtitle">A single-page operating reference for support teams to understand the account deletion journey, Slack notifier messages, user actions, and internal action points.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#journey">View process flow</a>
+          <button class="btn btn-secondary" type="button" onclick="window.print()">Print / Save PDF</button>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Process snapshot">
+        <div>
+          <div class="panel-label">Process snapshot</div>
+          <h2 class="panel-title">3 core stages from request to final deletion</h2>
+          <p class="panel-copy">Use Slack notifier updates to identify the current stage before setting expectations with the customer.</p>
+        </div>
+        <div class="mini-metrics">
+          <div class="mini-metric">
+            <div class="metric-number">01</div>
+            <div class="metric-label">Request raised</div>
+          </div>
+          <div class="mini-metric">
+            <div class="metric-number">02</div>
+            <div class="metric-label">ACF e-signed</div>
+          </div>
+          <div class="mini-metric">
+            <div class="metric-number">03</div>
+            <div class="metric-label">Account deleted</div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <main class="layout">
+      <aside class="toc" aria-label="Table of contents">
+        <div class="toc-title">On this page</div>
+        <a href="#overview"><span class="toc-dot"></span>Quick overview</a>
+        <a href="#journey"><span class="toc-dot"></span>Step-by-step journey</a>
+        <a href="#slack"><span class="toc-dot"></span>Slack notifier signals</a>
+        <a href="#roles"><span class="toc-dot"></span>Action matrix</a>
+        <a href="#support"><span class="toc-dot"></span>Support handling</a>
+        <a href="#checklist"><span class="toc-dot"></span>Final checklist</a>
+      </aside>
+
+      <div class="content">
+        <section class="section" id="overview">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Overview</div>
+              <h2>What the team needs to know</h2>
+              <p class="section-desc">This guide separates user-side activity from internal action. It is designed for quick verification during WhatsApp support, escalation checks, and refresher training.</p>
+            </div>
+            <span class="badge badge-green">White-first fintech layout</span>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card success">
+              <div class="summary-icon">1</div>
+              <h3>Request begins from app or website</h3>
+              <p>The flow starts when the user clicks the delete account option from the app or website.</p>
+            </div>
+            <div class="summary-card info">
+              <div class="summary-icon">2</div>
+              <h3>ACF e-sign is the key customer step</h3>
+              <p>The customer e-signs the Account Closure Form using the link shared with them.</p>
+            </div>
+            <div class="summary-card warning">
+              <div class="summary-icon">3</div>
+              <h3>Final deletion includes Demat closure</h3>
+              <p>Once the final closure is completed, the account is deleted along with the Demat account.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="journey">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Journey</div>
+              <h2>Account deletion process flow</h2>
+              <p class="section-desc">Check the latest Slack notifier stage first. Then use the corresponding action note to decide whether any customer or internal follow-up is needed.</p>
+            </div>
+            <span class="badge badge-blue">Process guidance</span>
+          </div>
+
+          <div class="process-rail">
+            <article class="process-step">
+              <div class="step-marker-wrap">
+                <div class="step-marker">1</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-card">
+                <div class="step-top">
+                  <div>
+                    <h3>Deletion request submitted</h3>
+                    <p class="section-desc">Triggered when the user clicks <strong>Delete account</strong> from the app or website.</p>
+                    <div class="step-meta">
+                      <span class="badge badge-blue">App / Website</span>
+                      <span class="badge badge-grey">Support action: NA</span>
+                    </div>
+                  </div>
+                  <span class="badge badge-green">Initiated</span>
+                </div>
+                <div class="step-body">
+                  <div class="action-box">
+                    <div class="action-label">User action</div>
+                    <p>User has clicked the delete account option from the app or website.</p>
+                  </div>
+                  <div class="action-box">
+                    <div class="action-label">Our action</div>
+                    <p>No action is required from the team at this stage.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="process-step">
+              <div class="step-marker-wrap">
+                <div class="step-marker">2</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-card">
+                <div class="step-top">
+                  <div>
+                    <h3>Account Closure Form e-signed</h3>
+                    <p class="section-desc">The user completes e-sign on the Account Closure Form through the shared link.</p>
+                    <div class="step-meta">
+                      <span class="badge badge-amber">ACF dependency</span>
+                      <span class="badge badge-blue">KYC check</span>
+                    </div>
+                  </div>
+                  <span class="badge badge-amber">Pending / dependency</span>
+                </div>
+                <div class="step-body">
+                  <div class="action-box">
+                    <div class="action-label">User action</div>
+                    <p>User e-signed the Account Closure Form using the link.</p>
+                  </div>
+                  <div class="action-box">
+                    <div class="action-label">Our action</div>
+                    <p>If KYC is submitted, the ACF link is shared via email. It can be shared automatically or manually.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="process-step">
+              <div class="step-marker-wrap">
+                <div class="step-marker">3</div>
+                <div class="step-line"></div>
+              </div>
+              <div class="step-card">
+                <div class="step-top">
+                  <div>
+                    <h3>Account deleted</h3>
+                    <p class="section-desc">Final closure stage where the account is deleted along with the Demat account.</p>
+                    <div class="step-meta">
+                      <span class="badge badge-green">Completed</span>
+                      <span class="badge badge-grey">User action: NA</span>
+                    </div>
+                  </div>
+                  <span class="badge badge-green">Closed</span>
+                </div>
+                <div class="step-body">
+                  <div class="action-box">
+                    <div class="action-label">User action</div>
+                    <p>No user action is required at this final stage.</p>
+                  </div>
+                  <div class="action-box">
+                    <div class="action-label">Our action</div>
+                    <p>The account is deleted along with the Demat account.</p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section" id="slack">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Slack notifier</div>
+              <h2>Expected Slack signals by stage</h2>
+              <p class="section-desc">Use these cards as a clean visual reference for the Slack bot messages shown in the account-deletion notification channel.</p>
+            </div>
+            <span class="badge badge-blue">Reference blocks</span>
+          </div>
+
+          <div class="slack-grid">
+            <div class="slack-card">
+              <div class="slack-head">
+                <div class="slack-bot">
+                  <div class="bot-avatar">S</div>
+                  <div>
+                    <div class="bot-name">slack notifier bot</div>
+                    <div class="bot-channel"># account-deletion-notifications</div>
+                  </div>
+                </div>
+                <div class="slack-time">Stage 01</div>
+              </div>
+              <div class="slack-body">
+                <div class="slack-title">Notification for Deactivation Request Raised</div>
+                <div class="slack-fields">
+                  <div class="field-key">User Id</div><div class="field-value">Shown in Slack message</div>
+                  <div class="field-key">Additional Info</div><div class="field-value">Shown if available</div>
+                  <div class="field-key">Meaning</div><div class="field-value">User has raised the deletion request</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slack-card">
+              <div class="slack-head">
+                <div class="slack-bot">
+                  <div class="bot-avatar">S</div>
+                  <div>
+                    <div class="bot-name">slack notifier bot</div>
+                    <div class="bot-channel"># account-deletion-notifications</div>
+                  </div>
+                </div>
+                <div class="slack-time">Stage 02</div>
+              </div>
+              <div class="slack-body">
+                <div class="slack-title">Notification for Account Closing Form Signed</div>
+                <div class="slack-fields">
+                  <div class="field-key">User Id</div><div class="field-value">Shown in Slack message</div>
+                  <div class="field-key">Additional Info</div><div class="field-value">May show mail or related details</div>
+                  <div class="field-key">Meaning</div><div class="field-value">User has e-signed the Account Closure Form</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slack-card">
+              <div class="slack-head">
+                <div class="slack-bot">
+                  <div class="bot-avatar">S</div>
+                  <div>
+                    <div class="bot-name">slack notifier bot</div>
+                    <div class="bot-channel"># account-deletion-notifications</div>
+                  </div>
+                </div>
+                <div class="slack-time">Stage 03</div>
+              </div>
+              <div class="slack-body">
+                <div class="slack-title">Account Deleted / Closure Completed</div>
+                <div class="slack-fields">
+                  <div class="field-key">User action</div><div class="field-value">NA</div>
+                  <div class="field-key">Internal action</div><div class="field-value">Account deleted along with Demat account</div>
+                  <div class="field-key">Meaning</div><div class="field-value">Closure journey has reached the final completed state</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="roles">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Action matrix</div>
+              <h2>User action vs internal action</h2>
+              <p class="section-desc">This table is designed for quick lookup when checking where the user is stuck in the closure flow.</p>
+            </div>
+            <span class="badge badge-green">Team reference</span>
+          </div>
+
+          <table class="matrix" aria-label="Account deletion action matrix">
+            <thead>
+              <tr>
+                <th>Stage</th>
+                <th>Slack signal</th>
+                <th>User action</th>
+                <th>Our action</th>
+                <th>Support note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Deletion request submitted</strong></td>
+                <td>Deactivation request raised</td>
+                <td>Clicked delete account from app or website</td>
+                <td>NA</td>
+                <td>Confirm request status only after checking Slack / internal system.</td>
+              </tr>
+              <tr>
+                <td><strong>2. ACF e-signed</strong></td>
+                <td>Account Closing Form signed</td>
+                <td>E-signed the Account Closure Form using the link</td>
+                <td>If KYC is submitted, ACF link is shared via email automatically or manually</td>
+                <td>Guide the user to complete the e-sign if the form is still pending.</td>
+              </tr>
+              <tr>
+                <td><strong>3. Account deleted</strong></td>
+                <td>Final deletion / closure confirmation</td>
+                <td>NA</td>
+                <td>Account is deleted along with Demat account</td>
+                <td>Use this stage only when final closure is confirmed.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="section" id="support">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Support handling</div>
+              <h2>Customer-support scripts and handling notes</h2>
+              <p class="section-desc">Use these only after verifying the current stage. Avoid confirming completion unless the final deletion stage is visible or confirmed internally.</p>
+            </div>
+            <span class="badge badge-amber">Use with verification</span>
+          </div>
+
+          <div class="tabbar" role="tablist" aria-label="Support scripts tabs">
+            <button class="tab-btn active" type="button" role="tab" aria-selected="true" data-tab="script-1">Request raised</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="script-2">ACF pending / signed</button>
+            <button class="tab-btn" type="button" role="tab" aria-selected="false" data-tab="script-3">Deletion completed</button>
+          </div>
+
+          <div id="script-1" class="tab-panel active" role="tabpanel">
+            <div class="script-card">
+              <div class="script-top">
+                <div class="script-title">When deletion request is raised</div>
+                <button class="copy-btn" type="button" data-copy="Sir/Madam, I can see that your account deletion request has been raised. The next step is the Account Closure Form e-sign, wherever applicable. Please complete the e-sign through the link shared with you so the closure flow can proceed.">Copy</button>
+              </div>
+              <p class="script-text">Sir/Madam, I can see that your account deletion request has been raised. The next step is the Account Closure Form e-sign, wherever applicable. Please complete the e-sign through the link shared with you so the closure flow can proceed.</p>
+            </div>
+            <div class="note"><strong>Internal note:</strong> At the request-raised stage, no direct support action is required as per the notifier reference.</div>
+          </div>
+
+          <div id="script-2" class="tab-panel" role="tabpanel">
+            <div class="script-card">
+              <div class="script-top">
+                <div class="script-title">When ACF link or e-sign is involved</div>
+                <button class="copy-btn" type="button" data-copy="Sir/Madam, the Account Closure Form is required for completing the closure flow. Since the link is shared over email when the required checks are in place, please complete the e-sign from the same link. Once the form is signed, the closure process will move to the next stage.">Copy</button>
+              </div>
+              <p class="script-text">Sir/Madam, the Account Closure Form is required for completing the closure flow. Since the link is shared over email when the required checks are in place, please complete the e-sign from the same link. Once the form is signed, the closure process will move to the next stage.</p>
+            </div>
+            <div class="warning-note"><strong>Expectation setting:</strong> Do not say the account is closed only because the ACF is signed. ACF signing is an intermediate stage before final deletion.</div>
+          </div>
+
+          <div id="script-3" class="tab-panel" role="tabpanel">
+            <div class="script-card">
+              <div class="script-top">
+                <div class="script-title">When account deletion is completed</div>
+                <button class="copy-btn" type="button" data-copy="Sir/Madam, your account closure has been completed. As part of the closure flow, the account has been deleted along with the Demat account.">Copy</button>
+              </div>
+              <p class="script-text">Sir/Madam, your account closure has been completed. As part of the closure flow, the account has been deleted along with the Demat account.</p>
+            </div>
+            <div class="note"><strong>Use this only after final confirmation:</strong> This script should be used only when the account-deleted stage is verified.</div>
+          </div>
+        </section>
+
+        <section class="section" id="checklist">
+          <div class="section-header">
+            <div>
+              <div class="section-kicker">Checklist</div>
+              <h2>Before responding to the customer</h2>
+              <p class="section-desc">A clean checklist reduces incorrect promises and helps the team set the right expectation.</p>
+            </div>
+            <span class="badge badge-green">Ready reference</span>
+          </div>
+
+          <div class="checklist">
+            <div class="check-item">
+              <div class="check-icon">✓</div>
+              <div>
+                <div class="check-title">Check the latest Slack notifier stage</div>
+                <div class="check-copy">Identify whether the case is at request raised, ACF signed, or final deletion.</div>
+              </div>
+              <span class="badge badge-blue">Mandatory</span>
+            </div>
+            <div class="check-item">
+              <div class="check-icon">✓</div>
+              <div>
+                <div class="check-title">Separate customer action from internal action</div>
+                <div class="check-copy">Do not ask the customer to do anything where the stage clearly says user action is NA.</div>
+              </div>
+              <span class="badge badge-green">Best practice</span>
+            </div>
+            <div class="check-item">
+              <div class="check-icon">✓</div>
+              <div>
+                <div class="check-title">Confirm ACF status before closure expectation</div>
+                <div class="check-copy">If the ACF is not signed, guide the user to complete the e-sign from the shared link.</div>
+              </div>
+              <span class="badge badge-amber">Dependency</span>
+            </div>
+            <div class="check-item">
+              <div class="check-icon">✓</div>
+              <div>
+                <div class="check-title">Use final closure language only after confirmation</div>
+                <div class="check-copy">Mention account and Demat account deletion only when the final stage is confirmed.</div>
+              </div>
+              <span class="badge badge-red">Avoid error</span>
+            </div>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="do-dont">
+            <div class="rule-card do">
+              <h3>Do</h3>
+              <ul>
+                <li>Verify the latest stage before responding.</li>
+                <li>Use simple language with clear next step.</li>
+                <li>Explain that ACF signing is part of the closure flow.</li>
+                <li>Set closure expectation only after final confirmation.</li>
+              </ul>
+            </div>
+            <div class="rule-card dont">
+              <h3>Don’t</h3>
+              <ul>
+                <li>Do not say the account is deleted at the request-raised stage.</li>
+                <li>Do not ask for customer action when user action is marked NA.</li>
+                <li>Do not skip KYC / ACF dependency while explaining the flow.</li>
+                <li>Do not use final closure script without verification.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div>Internal reference document for account deletion / closure flow.</div>
+        <div>Source basis: Slack notifier bot messages for account deletion journey.</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = button.getAttribute('data-tab');
+        tabButtons.forEach((btn) => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-selected', 'false');
+        });
+        tabPanels.forEach((panel) => panel.classList.remove('active'));
+        button.classList.add('active');
+        button.setAttribute('aria-selected', 'true');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    document.querySelectorAll('[data-copy]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const text = button.getAttribute('data-copy');
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = button.textContent;
+          button.textContent = 'Copied';
+          setTimeout(() => { button.textContent = original; }, 1200);
+        } catch (error) {
+          button.textContent = 'Select text';
+          setTimeout(() => { button.textContent = 'Copy'; }, 1200);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

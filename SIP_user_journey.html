@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP User Journey | Internal Training Reference</title>
+  <style>
+    :root {
+      --green: #05A54B;
+      --green-light: #E8F8EE;
+      --green-mid: #B3E8C9;
+      --green-deep: #048A3E;
+      --green-active: #065F2E;
+      --amber: #F59E0B;
+      --amber-light: #FEF3C7;
+      --amber-text: #92400E;
+      --red: #EF4444;
+      --red-light: #FEE2E2;
+      --red-text: #991B1B;
+      --blue: #3B82F6;
+      --blue-light: #EFF6FF;
+      --blue-text: #1E40AF;
+      --text: #111827;
+      --body: #374151;
+      --soft: #6B7280;
+      --grey: #F9FAFB;
+      --border: #E5E7EB;
+      --white: #FFFFFF;
+      --dark: #1a1a1a;
+      --warning-bg: #FFFBEB;
+      --warning-border: #FDE68A;
+      --warning-text: #92400E;
+      --warning-dark: #78350F;
+      --shadow: 0 16px 42px rgba(17, 24, 39, 0.08);
+      --shadow-soft: 0 8px 24px rgba(17, 24, 39, 0.06);
+      --radius-lg: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--white);
+      color: var(--body);
+      line-height: 1.6;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(5, 165, 75, 0.09), transparent 28%),
+        radial-gradient(circle at 86% 0%, rgba(59, 130, 246, 0.07), transparent 24%),
+        linear-gradient(180deg, #FFFFFF 0%, #FFFFFF 42%, #F9FAFB 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: 0.45;
+      background-image: radial-gradient(#E5E7EB 1px, transparent 1px);
+      background-size: 22px 22px;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 62%);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 44px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      padding: 36px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -180px;
+      top: -220px;
+      background: var(--green-light);
+      border-radius: 50%;
+      border: 1px solid var(--green-mid);
+    }
+
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 30px;
+      align-items: stretch;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: var(--green-light);
+      color: var(--green-active);
+      border: 1px solid var(--green-mid);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(5, 165, 75, 0.13);
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--text);
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      max-width: 780px;
+    }
+
+    h2 {
+      font-size: clamp(26px, 3vw, 38px);
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    h4 {
+      font-size: 15px;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 18px 0 0;
+      font-size: 18px;
+      color: var(--body);
+    }
+
+    .hero-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 22px;
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .hero-card .number {
+      font-size: 54px;
+      line-height: 1;
+      color: var(--green);
+      font-weight: 900;
+      letter-spacing: -0.08em;
+    }
+
+    .hero-card p {
+      margin: 8px 0 0;
+      color: var(--soft);
+      font-size: 14px;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .meta-pill {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--white);
+    }
+
+    .meta-pill span {
+      display: block;
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .meta-pill strong {
+      display: block;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .section {
+      margin-top: 34px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 22px;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      margin: 0;
+      max-width: 700px;
+      color: var(--soft);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.94);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .soft-card {
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+    }
+
+    .green-card {
+      background: var(--green-light);
+      border: 1px solid var(--green-mid);
+      border-radius: var(--radius-md);
+      padding: 22px;
+    }
+
+    .blue-card {
+      background: var(--blue-light);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: var(--radius-md);
+      padding: 22px;
+    }
+
+    .warning-card {
+      background: var(--warning-bg);
+      border: 1px solid var(--warning-border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+    }
+
+    .danger-card {
+      background: var(--red-light);
+      border: 1px solid rgba(239, 68, 68, 0.25);
+      border-radius: var(--radius-md);
+      padding: 22px;
+    }
+
+    .label {
+      color: var(--soft);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .badge.green {
+      background: var(--green-light);
+      color: #065F2E;
+      border: 1px solid var(--green-mid);
+    }
+
+    .badge.amber {
+      background: var(--amber-light);
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+
+    .badge.red {
+      background: var(--red-light);
+      color: #991B1B;
+      border: 1px solid rgba(239, 68, 68, 0.25);
+    }
+
+    .badge.blue {
+      background: var(--blue-light);
+      color: #1E40AF;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .badge.grey {
+      background: var(--grey);
+      color: #4B5563;
+      border: 1px solid var(--border);
+    }
+
+    .journey {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(6, minmax(150px, 1fr));
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+    }
+
+    .journey-step {
+      position: relative;
+      min-height: 255px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .journey-step::before {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 50px;
+      height: 3px;
+      border-radius: 999px;
+      background: var(--green-mid);
+    }
+
+    .step-index {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: var(--green);
+      color: var(--white);
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(5, 165, 75, 0.25);
+      margin-bottom: 34px;
+    }
+
+    .journey-step p {
+      margin: 0;
+      color: var(--body);
+      font-size: 14px;
+    }
+
+    .journey-step .note {
+      margin-top: 10px;
+      color: var(--soft);
+      font-size: 13px;
+    }
+
+    .date-flow {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 26px;
+    }
+
+    .flow-line {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+      overflow-x: auto;
+    }
+
+    .flow-item {
+      position: relative;
+      background: var(--grey);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      min-height: 140px;
+    }
+
+    .flow-item::after {
+      content: "";
+      position: absolute;
+      right: -14px;
+      top: 48px;
+      width: 14px;
+      height: 2px;
+      background: var(--green-mid);
+    }
+
+    .flow-item:last-child::after {
+      display: none;
+    }
+
+    .flow-item .day {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 32px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--green-light);
+      color: var(--green-active);
+      border: 1px solid var(--green-mid);
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+
+    .flow-item p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .compare {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--white);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .compare th,
+    .compare td {
+      text-align: left;
+      vertical-align: top;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    .compare th:last-child,
+    .compare td:last-child {
+      border-right: 0;
+    }
+
+    .compare tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .compare th {
+      color: var(--text);
+      background: var(--grey);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .compare td {
+      color: var(--body);
+      font-size: 14px;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-item {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 16px;
+    }
+
+    .mini-icon {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: var(--green-light);
+      color: var(--green-active);
+      border: 1px solid var(--green-mid);
+      font-weight: 900;
+    }
+
+    .mini-item p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .quote-box {
+      border-left: 4px solid var(--green);
+      background: var(--white);
+      padding: 16px 18px;
+      border-radius: 0 18px 18px 0;
+      color: var(--body);
+    }
+
+    .quote-box strong {
+      color: var(--text);
+    }
+
+    .support-block {
+      background: var(--dark);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      color: var(--white);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .support-block::before {
+      content: "";
+      position: absolute;
+      inset: auto -80px -160px auto;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(5, 165, 75, 0.24);
+    }
+
+    .support-block h2,
+    .support-block h3 {
+      color: var(--white);
+    }
+
+    .support-block p {
+      color: rgba(255,255,255,0.76);
+    }
+
+    .dark-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .dark-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .dark-card .label {
+      color: rgba(255,255,255,0.56);
+    }
+
+    .dark-card strong {
+      display: block;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .code-pill {
+      display: inline-flex;
+      max-width: 100%;
+      align-items: center;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.1);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 7px 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .rules-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .rule {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--white);
+    }
+
+    .rule-mark {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      background: var(--green-light);
+      color: var(--green-active);
+      border: 1px solid var(--green-mid);
+      flex: 0 0 auto;
+    }
+
+    .rule p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .scenario {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 100%;
+    }
+
+    .scenario-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .status-dot.green { background: var(--green); }
+    .status-dot.amber { background: var(--amber); }
+    .status-dot.red { background: var(--red); }
+    .status-dot.blue { background: var(--blue); }
+
+    .footer {
+      margin-top: 34px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      padding: 20px 0 0;
+      border-top: 1px solid var(--border);
+      color: var(--soft);
+      font-size: 13px;
+    }
+
+    .footer strong {
+      color: var(--text);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .scenario-grid,
+      .dark-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .journey {
+        grid-template-columns: repeat(6, 230px);
+      }
+
+      .flow-line {
+        grid-template-columns: repeat(5, 220px);
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .section-head p {
+        margin-top: 8px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 22px, 1180px);
+        padding-top: 20px;
+      }
+
+      .hero,
+      .support-block,
+      .date-flow {
+        padding: 22px;
+        border-radius: 24px;
+      }
+
+      .hero-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .compare {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .footer {
+        display: block;
+      }
+    }
+
+    @media print {
+      body::before,
+      body::after {
+        display: none;
+      }
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+      .hero,
+      .card,
+      .date-flow,
+      .support-block,
+      .journey-step,
+      .compare {
+        box-shadow: none;
+      }
+      .journey,
+      .flow-line {
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow"><span class="dot"></span> Internal training reference</div>
+          <h1>SIP User Journey</h1>
+          <p class="subtitle">A structured reference for explaining how Wint Wealth SIP setup, mandate creation, monthly deduction, skip/cancel rules, settlement, and support workflows work.</p>
+          <div class="badge-row">
+            <span class="badge green">Recurring bond investment</span>
+            <span class="badge blue">Autopay dependent</span>
+            <span class="badge amber">T-2 skip window</span>
+            <span class="badge grey">Customer support guide</span>
+          </div>
+        </div>
+        <aside class="hero-card">
+          <div>
+            <div class="number">6</div>
+            <h3>Core journey stages</h3>
+            <p>Theme selection, issuer review, first order, mandate setup, monthly notification, deduction and settlement.</p>
+          </div>
+          <div class="hero-meta">
+            <div class="meta-pill">
+              <span>Skip allowed till</span>
+              <strong>T-2 days</strong>
+            </div>
+            <div class="meta-pill">
+              <span>Settlement</span>
+              <strong>T+1 / next working day</strong>
+            </div>
+            <div class="meta-pill">
+              <span>UPI mandate</span>
+              <strong>₹10K SIP use case</strong>
+            </div>
+            <div class="meta-pill">
+              <span>eNACH mandate</span>
+              <strong>₹20K and above</strong>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Journey overview</div>
+          <h2>End-to-end SIP flow</h2>
+        </div>
+        <p>The SIP order behaves like a regular bond order after creation, but the payment is collected through the active Autopay mandate for recurring deductions.</p>
+      </div>
+      <div class="journey">
+        <article class="journey-step">
+          <span class="step-index">1</span>
+          <h3>Select SIP theme</h3>
+          <p>User selects the SIP theme, date of monthly deduction, and investment amount.</p>
+          <p class="note">High Rated and High Returns generally use amount multiples of ₹10,000.</p>
+        </article>
+        <article class="journey-step">
+          <span class="step-index">2</span>
+          <h3>Review issuer pool</h3>
+          <p>User sees issuers available under the selected theme pool.</p>
+          <p class="note">The user can modify the pool by excluding issuers they do not want.</p>
+        </article>
+        <article class="journey-step">
+          <span class="step-index">3</span>
+          <h3>Pay first installment</h3>
+          <p>The first installment is paid on the same day as a regular order through UPI or net banking.</p>
+          <p class="note">The initial order still gets the SIP benefit where applicable.</p>
+        </article>
+        <article class="journey-step">
+          <span class="step-index">4</span>
+          <h3>Set up Autopay</h3>
+          <p>After initial payment, the user sets up the Autopay mandate for recurring deductions.</p>
+          <p class="note">UPI is used for lower ticket SIPs. eNACH is used for higher ticket SIPs.</p>
+        </article>
+        <article class="journey-step">
+          <span class="step-index">5</span>
+          <h3>Monthly notification</h3>
+          <p>User gets a notification 5 days before deduction with the bond chosen for that month.</p>
+          <p class="note">The SIP order can be skipped only until T-2 days.</p>
+        </article>
+        <article class="journey-step">
+          <span class="step-index">6</span>
+          <h3>Deduction & settlement</h3>
+          <p>Autopay deduction happens on the chosen date. Order settles on the next working day.</p>
+          <p class="note">Once settled, the bond appears like a normal bond in the portfolio.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="date-flow">
+        <div class="section-head" style="margin-bottom:0;">
+          <div>
+            <div class="label">Date logic</div>
+            <h2>Example: deduction date is 11 May</h2>
+          </div>
+          <p>Use this example when explaining when the user can skip and when the order becomes non-cancellable due to NPCI pre-debit notification.</p>
+        </div>
+        <div class="flow-line">
+          <div class="flow-item">
+            <div class="day">6 May</div>
+            <h4>Notification sent</h4>
+            <p>User is informed about the current month SIP bond.</p>
+          </div>
+          <div class="flow-item">
+            <div class="day">6-9 May</div>
+            <h4>Skip window</h4>
+            <p>User can skip the active SIP order during this period.</p>
+          </div>
+          <div class="flow-item">
+            <div class="day">10 May</div>
+            <h4>Pre-debit notification</h4>
+            <p>NPCI pre-debit notification is triggered. Order cannot be cancelled.</p>
+          </div>
+          <div class="flow-item">
+            <div class="day">11 May</div>
+            <h4>Autopay deduction</h4>
+            <p>Deduction happens from the linked bank account.</p>
+          </div>
+          <div class="flow-item">
+            <div class="day">12 May</div>
+            <h4>Settlement</h4>
+            <p>Order settles on this date or the next working day.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">First order timing</div>
+          <h2>Initial payment and recurring debit logic</h2>
+        </div>
+        <p>The first installment is paid immediately when SIP is set up. The recurring Autopay deduction depends on whether there is a minimum 10-day gap from setup to the chosen deduction date.</p>
+      </div>
+      <div class="grid-2">
+        <article class="green-card">
+          <h3>Chosen date is 1-22</h3>
+          <p>If the user sets up SIP on 12 April and chooses any date from 1 to 22, the first Autopay deduction will happen in May.</p>
+          <div class="badge-row">
+            <span class="badge green">Initial order: 12 Apr</span>
+            <span class="badge blue">Recurring debit: May 1-22</span>
+          </div>
+        </article>
+        <article class="blue-card">
+          <h3>Chosen date is 23-30</h3>
+          <p>If the user sets up SIP on 12 April and chooses a date from 23 to 30, the recurring deduction can happen in April itself.</p>
+          <div class="badge-row">
+            <span class="badge green">Initial order: 12 Apr</span>
+            <span class="badge blue">Recurring debit: Apr 23-30</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Mandate setup</div>
+          <h2>UPI mandate vs eNACH mandate</h2>
+        </div>
+        <p>The mandate is the NPCI/payment instruction. SIP is Wint Wealth’s internal recurring investment configuration. Both need to be understood separately.</p>
+      </div>
+      <table class="compare" aria-label="UPI mandate and eNACH mandate comparison">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>UPI mandate</th>
+            <th>eNACH mandate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Typical use case</strong></td>
+            <td>Useful for ₹10,000 SIP setup.</td>
+            <td>Required for ₹20,000 and above SIP setup.</td>
+          </tr>
+          <tr>
+            <td><strong>Mandate limit</strong></td>
+            <td>Amount per cycle can be up to ₹15,000. This is the maximum cap, not always the exact debit amount.</td>
+            <td>Can be set for higher limits. Modification is supported up to ₹2,90,000.</td>
+          </tr>
+          <tr>
+            <td><strong>Monthly debit amount</strong></td>
+            <td>Actual debit depends on bond price on deduction date.</td>
+            <td>Actual debit depends on bond price on deduction date.</td>
+          </tr>
+          <tr>
+            <td><strong>Modification</strong></td>
+            <td>Amount cannot be modified. Date can be modified.</td>
+            <td>Both amount and deduction date can be modified.</td>
+          </tr>
+          <tr>
+            <td><strong>Support timeline</strong></td>
+            <td>Modification requests usually take 1-2 working days.</td>
+            <td>Modification requests usually take 1-2 working days.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Product rules</div>
+          <h2>Key rules support teams should remember</h2>
+        </div>
+        <p>These points are useful when explaining SIP behaviour, amount variations, cancellation limits, and insufficient fund scenarios.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <h3>Monthly amount may not be exactly flat</h3>
+          <p>If the user selects ₹10,000 SIP, the actual monthly debit may be around ₹10,021 or ₹9,989. This happens because bond prices fluctuate daily due to accrued interest and fair price movement.</p>
+          <div class="quote-box" style="margin-top:14px;">
+            <strong>Support explanation:</strong> The selected amount is the intended SIP size. The actual debit depends on the bond price on the deduction date.
+          </div>
+        </article>
+        <article class="warning-card">
+          <h3>Active SIP order blocks cancellation</h3>
+          <p>SIP cannot be cancelled when an active SIP order exists. The user must skip the order within the allowed window or wait until the order is settled.</p>
+          <div class="badge-row">
+            <span class="badge amber">Skip till T-2</span>
+            <span class="badge red">T-1 not cancellable</span>
+            <span class="badge grey">Wait for settlement</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Benefits</div>
+          <h2>Why SIP can be beneficial</h2>
+        </div>
+        <p>The benefit structure is designed around better recurring pricing and easier exit for SIP investments.</p>
+      </div>
+      <div class="grid-3">
+        <article class="green-card">
+          <h3>Extra 0.5% YTM benefit</h3>
+          <p>SIP investments can receive an additional 0.5% YTM benefit where applicable.</p>
+          <div class="badge-row">
+            <span class="badge green">0.25% no brokerage</span>
+            <span class="badge green">0.25% reduced seller premium</span>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Zero exit-load benefit</h3>
+          <p>For regular bonds, early exit may reduce the selling YTM by around 1%. For SIP investments, users can sell at the same YTM at which the bond was bought.</p>
+          <div class="badge-row">
+            <span class="badge green">Positive flow</span>
+            <span class="badge blue">Sell before maturity possible</span>
+          </div>
+        </article>
+        <article class="soft-card">
+          <h3>No maximum tenure</h3>
+          <p>The SIP continues monthly until the user chooses to cancel it, subject to active order and mandate rules.</p>
+          <div class="badge-row">
+            <span class="badge grey">Monthly recurring</span>
+            <span class="badge amber">User-controlled cancellation</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Themes</div>
+          <h2>Current SIP theme reference</h2>
+        </div>
+        <p>Use these as simple product-level explanations. Actual bond selection is determined by Wint Wealth’s framework for the selected theme.</p>
+      </div>
+      <div class="scenario-grid">
+        <article class="card scenario">
+          <div class="scenario-title">
+            <span class="status-dot green"></span>
+            <h3>High Rated</h3>
+          </div>
+          <p>Theme pool generally contains A-rated bonds.</p>
+          <div class="badge-row">
+            <span class="badge green">A rated</span>
+            <span class="badge blue">Diversified pool</span>
+          </div>
+        </article>
+        <article class="card scenario">
+          <div class="scenario-title">
+            <span class="status-dot amber"></span>
+            <h3>High Returns</h3>
+          </div>
+          <p>Theme pool generally contains high-yielding bonds from BBB- to A rated issuers.</p>
+          <div class="badge-row">
+            <span class="badge amber">BBB- to A</span>
+            <span class="badge blue">Higher yield pool</span>
+          </div>
+        </article>
+        <article class="card scenario">
+          <div class="scenario-title">
+            <span class="status-dot blue"></span>
+            <h3>₹5K SIP</h3>
+          </div>
+          <p>₹5K SIP is available, but it does not offer the extra 0.5% SIP benefit.</p>
+          <div class="badge-row">
+            <span class="badge blue">Lower ticket size</span>
+            <span class="badge grey">No extra 0.5%</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Cancellation & failure model</div>
+          <h2>Common edge cases</h2>
+        </div>
+        <p>These are the most important scenarios for customer support handling because they directly affect debit, cancellation, and user expectation setting.</p>
+      </div>
+      <div class="grid-3">
+        <article class="warning-card">
+          <h3>User asks to cancel on T-1</h3>
+          <p>Cancellation is not possible after the NPCI pre-debit stage. The user needs to wait for debit and settlement, then cancellation can be handled if no active SIP order remains.</p>
+          <div class="badge-row"><span class="badge amber">Waiting state</span><span class="badge red">Not cancellable</span></div>
+        </article>
+        <article class="danger-card">
+          <h3>Insufficient funds</h3>
+          <p>If funds are not available on debit day, the SIP order may fail and the SIP may get terminated. Wint Wealth does not charge a fine, but the bank may levy charges as per its policy.</p>
+          <div class="badge-row"><span class="badge red">Failure risk</span><span class="badge grey">Bank policy applies</span></div>
+        </article>
+        <article class="blue-card">
+          <h3>User cancels mandate directly</h3>
+          <p>If the user cancels the mandate before NPCI notification or before debit, it can cancel the mandate and the linked SIP flow. No deduction should happen in this hard-cancel scenario.</p>
+          <div class="badge-row"><span class="badge blue">Customer action</span><span class="badge amber">Edge case</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Definitions</div>
+          <h2>Terminology quick guide</h2>
+        </div>
+        <p>These terms should be used consistently while explaining the process internally or to users.</p>
+      </div>
+      <div class="grid-2">
+        <div class="stack">
+          <div class="mini-item">
+            <div class="mini-icon">M</div>
+            <div>
+              <h4>Mandate</h4>
+              <p>Autopay mandate registered with NPCI/payment rail for recurring debit.</p>
+            </div>
+          </div>
+          <div class="mini-item">
+            <div class="mini-icon">S</div>
+            <div>
+              <h4>SIP</h4>
+              <p>Wint Wealth internal recurring investment configuration selected by the user.</p>
+            </div>
+          </div>
+        </div>
+        <div class="stack">
+          <div class="mini-item">
+            <div class="mini-icon">O</div>
+            <div>
+              <h4>SIP order</h4>
+              <p>An active monthly order that works like a regular bond order, except payment happens through Autopay.</p>
+            </div>
+          </div>
+          <div class="mini-item">
+            <div class="mini-icon">ID</div>
+            <div>
+              <h4>Subscription ID</h4>
+              <p>Identifier of the SIP Autopay mandate in Wint Finder. It can be used to filter the mandate and SIP order status in Cashfree.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="support-block">
+        <div class="section-head" style="margin-bottom:0;">
+          <div>
+            <div class="label">Internal support workflow</div>
+            <h2>Where to check and where to raise</h2>
+          </div>
+          <p>Use this block for support operations, cancellation requests, modification requests, and issue escalation.</p>
+        </div>
+        <div class="dark-grid">
+          <article class="dark-card">
+            <div class="label">Check mandate/order status</div>
+            <strong>Wint Finder + Cashfree</strong>
+            <p>Find the Subscription ID in Wint Finder and use it to filter SIP mandate and order status in Cashfree.</p>
+            <span class="code-pill">Wint_Wealth_21775045729045</span>
+          </article>
+          <article class="dark-card">
+            <div class="label">Cancel SIP from support end</div>
+            <strong>Raise workflow in #cx-api</strong>
+            <p>Share User ID, SIP ID, mobile number, email ID, and user email confirmation. Ensure there is no active SIP order.</p>
+          </article>
+          <article class="dark-card">
+            <div class="label">Any SIP issue</div>
+            <strong>Raise in #cx-internal-coordination</strong>
+            <p>Use the SIP workflow and include relevant screenshots, SIP ID, mandate status, and user confirmation wherever applicable.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="label">Customer support script</div>
+          <h2>Ready-to-use explanation blocks</h2>
+        </div>
+        <p>These lines can be adapted for WhatsApp or email responses while keeping the explanation simple and clear.</p>
+      </div>
+      <div class="grid-2">
+        <article class="card">
+          <h3>When user asks why amount changed</h3>
+          <div class="quote-box">
+            Sir/Madam, the SIP amount may not be exactly the same every month because the bond price changes daily due to accrued interest. The selected SIP amount acts like the target amount, and the final debit depends on the bond price on the deduction date.
+          </div>
+        </article>
+        <article class="card">
+          <h3>When user asks to skip/cancel late</h3>
+          <div class="quote-box">
+            Sir/Madam, since the SIP order is already close to the deduction date, it cannot be cancelled after the NPCI pre-debit stage. Once the order is settled, I can help you with the next available cancellation step if there is no active SIP order.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div><strong>SIP User Journey</strong> · Internal training and customer-support reference</div>
+      <div>White-first fintech layout · Accent color #05A54B</div>
+    </footer>
+  </main>
+</body>
+</html>

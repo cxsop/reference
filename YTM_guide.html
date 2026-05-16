@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YTM Explained — Agent Reference Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #05a54b;
+    --green-light: #e6f7ee;
+    --green-mid: #b3e6cc;
+    --green-dark: #037a37;
+    --green-deeper: #025c29;
+    --white: #ffffff;
+    --off-white: #f8faf9;
+    --text-dark: #1a2b22;
+    --text-mid: #3d5446;
+    --text-muted: #6b8576;
+    --border: #d4e8dc;
+    --border-light: #eaf4ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text-dark);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--green-deeper) 0%, var(--green) 60%, #07c55a 100%);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    font-weight: 600;
+    color: white;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.82);
+    font-size: 16px;
+    max-width: 580px;
+    margin: 0 auto 2rem;
+    font-weight: 300;
+  }
+  .hero-tip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 14px;
+    font-weight: 400;
+    max-width: 520px;
+  }
+  .hero-tip strong { font-weight: 500; }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  /* QUICK CARDS (at top) */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 3rem;
+  }
+  .quick-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    border-top: 3px solid var(--green);
+  }
+  .quick-card .label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--green-dark);
+    margin-bottom: 6px;
+  }
+  .quick-card .value {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.3;
+  }
+
+  /* SECTION HEADERS */
+  .section { margin-bottom: 3rem; }
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .section-icon {
+    width: 36px; height: 36px; min-width: 36px;
+    background: var(--green-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    color: var(--green-dark);
+  }
+  .section-head h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text-dark);
+  }
+  .section-head p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  /* SCRIPT BOX */
+  .script-box {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+  .script-box .step-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--green-dark);
+    background: var(--green-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .script-box h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+  }
+  .script-box p { color: var(--text-mid); font-size: 14.5px; margin-bottom: 10px; }
+  .script-box p:last-child { margin-bottom: 0; }
+
+  /* SPEECH BUBBLE */
+  .speech {
+    background: var(--green-light);
+    border-left: 3px solid var(--green);
+    border-radius: 0 10px 10px 0;
+    padding: 14px 18px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--text-mid);
+    font-style: italic;
+  }
+  .speech strong { font-style: normal; font-weight: 500; color: var(--green-dark); }
+
+  /* TABLE */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 12px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .styled-table thead tr {
+    background: var(--green);
+    color: white;
+  }
+  .styled-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+  .styled-table tbody tr { border-bottom: 1px solid var(--border-light); }
+  .styled-table tbody tr:nth-child(even) { background: var(--off-white); }
+  .styled-table tbody tr:last-child { border-bottom: none; }
+  .styled-table td { padding: 10px 14px; color: var(--text-mid); }
+  .styled-table td:first-child { font-weight: 500; color: var(--text-dark); }
+
+  /* FAQ ACCORDION */
+  .faq-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text-dark);
+    transition: background 0.2s;
+  }
+  .faq-q:hover { background: var(--off-white); }
+  .faq-q.open { background: var(--green-light); color: var(--green-deeper); }
+  .faq-chevron {
+    width: 22px; height: 22px; min-width: 22px;
+    border-radius: 50%;
+    background: var(--green-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    color: var(--green-dark);
+    transition: transform 0.25s;
+  }
+  .faq-q.open .faq-chevron { transform: rotate(180deg); background: var(--green); color: white; }
+  .faq-a {
+    display: none;
+    padding: 0 20px 18px;
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.75;
+    background: white;
+  }
+  .faq-a.open { display: block; }
+  .faq-a .speech { margin: 10px 0 0; }
+
+  /* EXAMPLE BOX */
+  .example-box {
+    background: var(--green-deeper);
+    border-radius: 14px;
+    padding: 1.75rem;
+    color: rgba(255,255,255,0.9);
+    margin: 1rem 0;
+  }
+  .example-box .ex-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 12px;
+  }
+  .example-box p { font-size: 14.5px; line-height: 1.75; margin-bottom: 8px; }
+  .example-box p:last-child { margin-bottom: 0; }
+  .example-box strong { color: #7ffaac; font-weight: 500; }
+  .example-box .calc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 14px;
+  }
+  .example-box .calc-row:last-child { border-bottom: none; }
+  .example-box .calc-val { font-weight: 500; color: #7ffaac; }
+  .example-box .highlight-result {
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  /* ONE LINER TIP */
+  .tip-box {
+    background: var(--green);
+    border-radius: 12px;
+    padding: 1.25rem 1.75rem;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 1.5rem 0;
+  }
+  .tip-icon { font-size: 24px; }
+  .tip-box p { color: white; font-size: 15px; font-weight: 400; margin: 0; }
+  .tip-box strong { font-weight: 500; }
+
+  /* EMPATHY CLOSER */
+  .closer {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+  .closer h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+  }
+  .closer .speech {
+    text-align: left;
+    border-radius: 10px;
+    margin-top: 12px;
+  }
+
+
+  @media (max-width: 600px) {
+    .hero { padding: 3rem 1.25rem 2rem; }
+    .container { padding: 2rem 1.25rem; }
+    .quick-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="badge">&#128218; Internal Use Only &mdash; Support Team</div>
+  <h1>YTM Explained Simply<br>for Indian Investors</h1>
+  <p>This helps you explain Yield to Maturity with empathy, clarity, and the FD context your customers already understand.</p>
+  <div class="hero-tip">
+    <span>&#128161;</span>
+    <span><strong>One-liner:</strong> "Coupon is what the bond pays you. YTM is what you actually earn. We should always look at YTM when the repayments are paid periodically &amp; investment price changes every day."</span>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- QUICK REFERENCE CARDS -->
+  <div class="quick-grid">
+    <div class="quick-card">
+      <div class="label">Coupon Rate</div>
+      <div class="value">Fixed % paid on face value (₹1,000) periodically</div>
+    </div>
+    <div class="quick-card">
+      <div class="label">YTM</div>
+      <div class="value">True all-in return if held till maturity</div>
+    </div>
+    <div class="quick-card">
+      <div class="label">FD Equivalent</div>
+      <div class="value">YTM ≈ effective annual FD rate</div>
+    </div>
+    <div class="quick-card">
+      <div class="label">Remember</div>
+      <div class="value">Price ↑ means YTM ↓ — they always move opposite</div>
+    </div>
+  </div>
+
+  <!-- SECTION: CORE CONCEPT -->
+  <div class="section" id="concept">
+    <div class="section-head">
+      <div class="section-icon">&#128218;</div>
+      <div>
+        <h2>Core Concept Clarity</h2>
+        <p>Understand this before explaining to any customer</p>
+      </div>
+    </div>
+
+    <div class="script-box">
+      <h3>Why Coupon Alone Is Not Enough</h3>
+      <p>An FD is simple — you put in money, earn the stated rate, get it back. Bonds work differently because they are bought and sold in the market at varying prices.</p>
+      <table class="styled-table">
+        <thead><tr><th>Situation</th><th>You Pay</th><th>You Receive at Maturity</th><th>Impact</th></tr></thead>
+        <tbody>
+          <tr><td>Bought at Discount</td><td>&#8377;950</td><td>&#8377;1,000</td><td>Extra &#8377;50 gain &#9989;</td></tr>
+          <tr><td>Bought at Par</td><td>&#8377;1,000</td><td>&#8377;1,000</td><td>No gain or loss</td></tr>
+          <tr><td>Bought at Premium</td><td>&#8377;1,050</td><td>&#8377;1,000</td><td>&#8377;50 loss &#9888;&#65039;</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:10px;">The coupon rate does not capture this gain or loss. <strong style="color:var(--green-dark)">Only YTM does.</strong> That is why we show YTM — it is the complete, honest picture.</p>
+    </div>
+  </div>
+
+  <!-- SECTION: MASTER SCRIPT -->
+  <div class="section" id="script">
+    <div class="section-head">
+      <div class="section-icon">&#128172;</div>
+      <div>
+        <h2>Master Script</h2>
+        <p>Walk customers through this step by step</p>
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Opening — Build Empathy First</div>
+      <div class="speech">
+        "That is a very valid question, and honestly most of our customers ask the same thing at first! Since most of us have grown up investing in FDs, bonds can feel a little different. Let me explain this in a very simple way."
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Step 1 — Start with What They Know</div>
+      <h3>Use the FD Analogy</h3>
+      <div class="speech">
+        "When you invest in an FD, the bank tells you one simple number — say <strong>7% per year</strong>. You put in money, it grows at 7%, and you get it back at the end. Simple, right?<br><br>
+        Now, bonds also pay you interest — we call it the <strong>Coupon Rate</strong>. For example, a bond might say <strong>8% coupon</strong>, which means if the bond's face value is &#8377;1,000, you will receive &#8377;80 every year as interest. So far, sounds just like an FD. But here is where bonds are a little different..."
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Step 2 — Introduce the Price Difference</div>
+      <h3>Why the Price You Pay Matters</h3>
+      <div class="speech">
+        "Unlike an FD where you always put in exactly the amount the bank asks, bonds are bought and sold in the market — just like shares. So the <strong>price you actually pay</strong> for a bond may not be exactly &#8377;1,000. But no matter what you paid, the company will always pay you back <strong>exactly &#8377;1,000 at maturity</strong>.<br><br>
+        So if you paid only &#8377;950, you will get &#8377;1,000 back — that extra &#8377;50 is also your profit! And if you paid &#8377;1,050, you will only get &#8377;1,000 back — meaning a small loss of &#8377;50. The coupon rate does not show this. Only YTM does."
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Step 3 — Define YTM Simply</div>
+      <h3>What YTM Includes</h3>
+      <p>YTM — <strong>Yield to Maturity</strong> — is the true, all-in return you earn if you hold the bond until its end date.</p>
+      <table class="styled-table">
+        <thead><tr><th>What YTM Includes</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Regular coupon payments you receive</td><td>&#9989; Yes</td></tr>
+          <tr><td>Gain if bought at discount (below &#8377;1,000)</td><td>&#9989; Yes</td></tr>
+          <tr><td>Loss if bought at premium (above &#8377;1,000)</td><td>&#9888;&#65039; Adjusted</td></tr>
+          <tr><td>Time value of money</td><td>&#9989; Yes</td></tr>
+        </tbody>
+      </table>
+      <div class="speech" style="margin-top:14px;">
+        "Think of YTM as the bond's <strong>actual effective interest rate</strong> — just like the FD rate your bank gives you. It tells you the complete story in one single number."
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: REAL EXAMPLE -->
+  <div class="section" id="example">
+    <div class="section-head">
+      <div class="section-icon">&#127758;</div>
+      <div>
+        <h2>The Real-Life Indian Example</h2>
+        <p>Use this to make it concrete for your customer</p>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <div class="ex-title">&#127881; Government Bond — Practical Scenario</div>
+      <p>Suppose there is a <strong>Government Bond</strong> with face value <strong>&#8377;1,000</strong>, coupon of <strong>8%</strong> (i.e. &#8377;80/year), maturing in <strong>5 years</strong>. But today in the market, this bond is available for only <strong>&#8377;920</strong>.</p>
+
+      <div style="margin: 16px 0;">
+        <div class="calc-row"><span>Annual coupon received</span><span class="calc-val">&#8377;80 x 5 years = &#8377;400</span></div>
+        <div class="calc-row"><span>Maturity payout</span><span class="calc-val">&#8377;1,000</span></div>
+        <div class="calc-row"><span>You paid</span><span class="calc-val">&#8377;920</span></div>
+        <div class="calc-row"><span>Extra gain at maturity</span><span class="calc-val">&#8377;80 profit</span></div>
+        <div class="calc-row"><span>Total earnings over 5 years</span><span class="calc-val">&#8377;400 + &#8377;80 = &#8377;480</span></div>
+      </div>
+
+      <div class="highlight-result">
+        &#127919; Coupon shows <strong>8%</strong> &nbsp;|&nbsp; But your actual <strong>YTM ≈ 9.8%</strong><br>
+        <span style="font-size:13px; color:rgba(255,255,255,0.65); font-weight:300;">YTM tells you the real return. Coupon alone would have misled you.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: WHY PRICE CHANGES -->
+  <div class="section" id="pricechange">
+    <div class="section-head">
+      <div class="section-icon">&#128200;</div>
+      <div>
+        <h2>Why Does the Bond Price Change on Our Platform?</h2>
+        <p>Three key reasons to explain to customers when they notice price movements</p>
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Reason 1 — Accrued Interest</div>
+      <h3>The Price Includes Interest Already Earned</h3>
+      <p>When a bond is bought between two coupon payment dates, the price shown on the platform includes the interest that has been accumulating since the last coupon was paid. This is called <strong>accrued interest</strong>.</p>
+      <div class="speech">
+        "Think of it like this — if you are buying someone's FD mid-way, you are also compensating them for the interest they have already earned up to that day. So the price you see on the platform on any given day reflects the bond's clean price <strong>plus</strong> this accrued interest. It is not a hidden charge — it is interest that rightfully belongs to the previous holder, and you will recover it when the next coupon is paid to you in full."
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Reason 2 — Special Offers &amp; Zero Brokerage Markup</div>
+      <h3>You May Earn Extra YTM Through Our Offers</h3>
+      <p>From time to time, our platform announces special offers where we do not charge our standard brokerage markup of <strong>0.25%</strong>. During these offer periods, the effective YTM for the customer is higher because the price they pay is lower.</p>
+      <div class="speech">
+        "We periodically run offers where we waive our brokerage markup of 0.25%. This directly benefits you — since you are paying a slightly lower price for the same bond, your YTM effectively goes up. So if you invest during an offer period, the return you see on your platform will be better than usual. We recommend keeping an eye on our app notifications so you do not miss these."
+      </div>
+    </div>
+
+    <div class="script-box">
+      <div class="step-label">Reason 3 — Bond SIP Option</div>
+      <h3>Get an Effective Extra 0.5% YTM with Bond SIP</h3>
+      <p>When a customer chooses the <strong>Bond SIP</strong> option on our platform, they benefit from an additional effective YTM boost of approximately <strong>0.5%</strong>. This is because the SIP structure allows us to pass on further cost benefits to the investor.</p>
+      <div class="speech">
+        "If you invest through our Bond SIP option, you get an effective extra 0.5% YTM compared to a one-time lump sum investment in the same bond. This is one of the best ways to make your bond investment work harder for you — and it is as simple and automatic as an SIP in mutual funds. Your money goes in regularly, and each instalment benefits from this improved pricing."
+      </div>
+    </div>
+  </div>
+
+
+  <div class="section" id="faq">
+    <div class="section-head">
+      <div class="section-icon">&#10067;</div>
+      <div>
+        <h2>Customer FAQ Responses</h2>
+        <p>Click each question for the suggested response</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        "If interest is based on coupon, why do you show YTM on your platform?"
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="speech">
+          "Absolutely understand your confusion! Yes, the <strong>actual cash you receive</strong> periodically is based on the coupon rate — that part is correct.<br><br>
+          But imagine two bonds both with 8% coupon — one available at &#8377;950 and another at &#8377;1,050. If you just look at the coupon, they look the same! But your actual earnings are very different because of the different prices you paid.<br><br>
+          YTM accounts for this difference and gives you a fair comparison — just like how banks show you the <strong>effective interest rate</strong> along with the nominal rate. We show YTM so you can make a <strong>fully informed decision</strong>, not a partial one."
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        "What is the difference between Coupon and YTM?"
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <table class="styled-table" style="margin-top:10px;">
+          <thead><tr><th></th><th>Coupon Rate</th><th>YTM</th></tr></thead>
+          <tbody>
+            <tr><td>What it is</td><td>Fixed interest the bond pays</td><td>Total effective return on investment</td></tr>
+            <tr><td>Based on</td><td>Face value (&#8377;1,000)</td><td>Actual price you paid</td></tr>
+            <tr><td>Changes?</td><td>Never — fixed at issue</td><td>Changes as market price changes</td></tr>
+            <tr><td>FD Equivalent</td><td>The advertised rate</td><td>The effective annual yield</td></tr>
+          </tbody>
+        </table>
+        <div class="speech" style="margin-top:12px;">
+          "Coupon is the <strong>label on the bottle</strong>. YTM is <strong>what is actually inside</strong>."
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        "You don't offer reinvestment on your platform — so why show YTM?"
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="speech">
+          "This is a very sharp question, and we really appreciate you asking this!<br><br>
+          You are right that the textbook formula for YTM carries an assumption that coupon payments are reinvested. However, as per <strong>SEBI and RBI bond market conventions in India</strong>, YTM is the standard industry measure used to quote and compare bond returns. Every bank, broker, and platform — including the <strong>RBI Retail Direct portal</strong> — quotes bonds using YTM.<br><br>
+          Even without reinvestment, YTM still gives you a reliable picture because it accounts for the price you paid vs. the face value you receive, and also for the time value of money.<br><br>
+          Think of it this way — even if you spend your FD interest every month instead of reinvesting, the bank still quotes you <strong>7% p.a.</strong> That rate is still useful to compare. Similarly, YTM remains meaningful even without reinvestment."
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        "How exactly is YTM calculated?"
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="speech">
+          "The exact calculation uses financial mathematics, but here is the simple idea:<br><br>
+          YTM is the <strong>one single interest rate</strong> that, when applied to all your future cash flows — the coupon payments and the final maturity amount — gives you back exactly the price you paid today.<br><br>
+          In plain words: <strong>What you pay today = Present value of all future coupons + Present value of maturity amount, discounted at YTM.</strong><br><br>
+          Our platform calculates this automatically for every bond, so you never have to do this math yourself. A bond with <strong>YTM of 8.5%</strong> is broadly equivalent to an <strong>FD giving you 8.5%</strong> — that is the simplest way to think about it."
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        "Is higher YTM always better?"
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="speech">
+          "Great question! Generally yes — a higher YTM means higher returns. But do keep in mind: <strong>higher YTM can also mean higher risk.</strong><br><br>
+          A lower-rated company bond may offer 11% YTM, but there is more risk compared to a Government bond at 7.5%. Always look at the <strong>credit rating alongside YTM</strong>. A Government bond or AAA-rated bond at 7.5% YTM may actually be a better choice than an unrated bond at 11% YTM, depending on your risk comfort.<br><br>
+          We always recommend checking both the YTM <strong>and</strong> the credit rating together before investing."
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        "Why does YTM change every day? The coupon is fixed, right?"
+        <span class="faq-chevron">&#9660;</span>
+      </button>
+      <div class="faq-a">
+        <div class="speech">
+          "Absolutely correct — the coupon never changes. But bond <strong>prices change every day</strong> in the market, just like share prices. And since YTM is calculated based on the price you pay, it moves as prices move.<br><br>
+          When bond prices go <strong>up</strong>, YTM comes <strong>down</strong> — and vice versa. They always move in opposite directions.<br><br>
+          The good news: the <strong>coupon cash flows you will receive remain fixed and guaranteed</strong> regardless of daily price changes. YTM just reflects what you earn based on today's market price."
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: CLOSING -->
+  <div class="section" id="closer">
+    <div class="section-head">
+      <div class="section-icon">&#9733;</div>
+      <div>
+        <h2>Empathy Closing Statement</h2>
+        <p>Always end every YTM conversation with this</p>
+      </div>
+    </div>
+
+    <div class="closer">
+      <h3>Your Go-To Closing Script</h3>
+      <div class="speech">
+        "I completely understand that bonds are a newer concept compared to FDs for most of us. The good news is — once you get familiar with YTM, it actually becomes very easy to compare bonds with FDs and make confident decisions. Please feel free to reach out anytime — we are always happy to walk you through this. <strong>Your financial clarity is very important to us!</strong>"
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT TIP -->
+  <div class="tip-box">
+    <div class="tip-icon">&#128161;</div>
+    <p><strong>Quick Agent Tip:</strong> For customers who are still confused after all explanations, use this single line — "Coupon is what the bond pays you. YTM is what you actually earn. Always look at YTM."</p>
+  </div>
+
+</div>
+
+
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = btn.classList.contains('open');
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      answer.classList.add('open');
+    }
+  }
+</script>
+</body>
+</html>
